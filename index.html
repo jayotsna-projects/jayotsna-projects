@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EventEase campus event organization and registration system">
+  <title>EventEase | Event Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top navigation -->
+  <header class="topbar">
+    <a class="brand" href="#" id="brandHome">Event<span>Ease</span></a>
+    <div class="top-actions">
+      <span id="sessionLabel" class="session-label">Welcome to EventEase</span>
+      <button id="profileButton" class="profile-button hidden" type="button">
+        <span id="avatar">U</span>
+        <span>My Profile</span>
+      </button>
+      <button id="logoutButton" class="btn btn-outline hidden" type="button">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- LOGIN / SIGNUP -->
+    <section id="authView" class="auth-layout">
+      <div class="auth-intro">
+        <span class="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span>
+        <h1>Great events.<br><span>Better memories.</span></h1>
+        <p>Discover upcoming events, reserve your place, and stay updated on your registrations.</p>
+        <div class="auth-feature">✦ Discover campus events</div>
+        <div class="auth-feature">✦ Track your registration status</div>
+        <div class="auth-feature">✦ Organize events from one dashboard</div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth="login" type="button">Login</button>
+          <button class="auth-tab" data-auth="signup" type="button">Create Account</button>
+        </div>
+
+        <form id="loginForm">
+          <span class="eyebrow">WELCOME BACK</span>
+          <h2>Sign in to EventEase</h2>
+          <p class="muted">Enter your account details to continue.</p>
+
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" type="email" required autocomplete="username"
+            placeholder="you@example.com">
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" required
+            autocomplete="current-password" placeholder="Enter password">
+
+          <button class="btn btn-primary full" type="submit">Login →</button>
+          <p class="form-message" id="loginMessage" role="status"></p>
+        </form>
+
+        <form id="signupForm" class="hidden">
+          <span class="eyebrow">JOIN THE COMMUNITY</span>
+          <h2>Create your account</h2>
+          <p class="muted">Sign up to explore and register for events.</p>
+
+          <label for="signupName">Full name</label>
+          <input id="signupName" type="text" required maxlength="80"
+            autocomplete="name" placeholder="Your full name">
+
+          <label for="signupEmail">Email address</label>
+          <input id="signupEmail" type="email" required maxlength="150"
+            autocomplete="email" placeholder="you@example.com">
+
+          <label for="signupDepartment">Department / course</label>
+          <input id="signupDepartment" type="text" required maxlength="100"
+            placeholder="e.g. MCA">
+
+          <label for="signupPassword">Password</label>
+          <input id="signupPassword" type="password" required minlength="6"
+            autocomplete="new-password" placeholder="At least 6 characters">
+
+          <button class="btn btn-primary full" type="submit">Create Account →</button>
+          <p class="form-message" id="signupMessage" role="status"></p>
+        </form>
+
+        <div class="demo-credentials">
+          <strong>Demo administrator account</strong>
+          <span>Email: admin@eventease.demo</span>
+          <span>Password: Admin123!</span>
+          <small>Demo only. Use these credentials only for this local project.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- USER DASHBOARD -->
+    <section id="userView" class="page hidden">
+      <div class="welcome-banner">
+        <div>
+          <span class="eyebrow">YOUR EVENT SPACE</span>
+          <h1>Welcome, <span id="userGreeting">Student</span>!</h1>
+          <p>Find your next experience and keep track of your registrations.</p>
+        </div>
+        <div class="banner-symbol">✳</div>
+      </div>
+
+      <div class="stat-grid">
+        <article class="stat-card">
+          <span>Upcoming events</span>
+          <strong id="userUpcomingCount">0</strong>
+          <small>Available to explore</small>
+        </article>
+        <article class="stat-card">
+          <span>My registrations</span>
+          <strong id="userRegistrationCount">0</strong>
+          <small>Events you've requested</small>
+        </article>
+        <article class="stat-card">
+          <span>Confirmed</span>
+          <strong id="userConfirmedCount">0</strong>
+          <small>Approved registrations</small>
+        </article>
+      </div>
+
+      <div class="section-title">
+        <div>
+          <span class="eyebrow">DISCOVER SOMETHING NEW</span>
+          <h2>Upcoming events</h2>
+        </div>
+        <div class="search-control">
+          <input id="userSearch" type="search"
+            placeholder="Search events..." aria-label="Search upcoming events">
+        </div>
+      </div>
+
+      <div id="userEventsGrid" class="events-grid"></div>
+      <p id="userEventsEmpty" class="empty-state hidden">No matching upcoming events.</p>
+
+      <section class="content-panel registrations-section">
+        <div class="section-title">
+          <div>
+            <span class="eyebrow">YOUR ACTIVITY</span>
+            <h2>My registrations</h2>
+          </div>
+        </div>
+        <div id="myRegistrations" class="registration-list"></div>
+        <p id="myRegistrationsEmpty" class="empty-state hidden">
+          You haven't registered for any events yet.
+        </p>
+      </section>
+    </section>
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="adminView" class="page hidden">
+      <div class="welcome-banner admin-banner">
+        <div>
+          <span class="eyebrow">EVENT OPERATIONS</span>
+          <h1>Organizer <span>dashboard.</span></h1>
+          <p>Create events, manage capacity, and review participant requests.</p>
+        </div>
+        <div class="banner-symbol">⌘</div>
+      </div>
+
+      <div class="stat-grid">
+        <article class="stat-card">
+          <span>Total events</span>
+          <strong id="adminEventCount">0</strong>
+          <small>All listed events</small>
+        </article>
+        <article class="stat-card">
+          <span>Pending requests</span>
+          <strong id="adminPendingCount">0</strong>
+          <small>Awaiting your decision</small>
+        </article>
+        <article class="stat-card">
+          <span>Available seats</span>
+          <strong id="adminAvailableSeats">0</strong>
+          <small>Seats remaining overall</small>
+        </article>
+      </div>
+
+      <div class="admin-layout">
+        <!-- CREATE / UPDATE EVENT -->
+        <section class="content-panel">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">EVENT MANAGEMENT</span>
+              <h2 id="eventFormHeading">Create an event</h2>
+            </div>
+          </div>
+
+          <form id="eventForm">
+            <input id="editEventId" type="hidden">
+
+            <label for="eventTitle">Event title</label>
+            <input id="eventTitle" type="text" required maxlength="100"
+              placeholder="e.g. Annual Tech Fest">
+
+            <div class="two-columns">
+              <div>
+                <label for="eventCategory">Category</label>
+                <select id="eventCategory" required>
+                  <option>Technical</option>
+                  <option>Cultural</option>
+                  <option>Workshop</option>
+                  <option>Sports</option>
+                  <option>Seminar</option>
+                </select>
+              </div>
+              <div>
+                <label for="eventDate">Date</label>
+                <input id="eventDate" type="date" required>
+              </div>
+            </div>
+
+            <div class="two-columns">
+              <div>
+                <label for="eventTime">Time</label>
+                <input id="eventTime" type="time" value="10:00" required>
+              </div>
+              <div>
+                <label for="eventCapacity">Total seats</label>
+                <input id="eventCapacity" type="number" min="1" max="10000"
+                  value="100" required>
+              </div>
+            </div>
+
+            <label for="eventVenue">Venue</label>
+            <input id="eventVenue" type="text" required maxlength="120"
+              placeholder="e.g. College Auditorium">
+
+            <label for="eventDescription">Description</label>
+            <textarea id="eventDescription" rows="3" maxlength="500"
+              required placeholder="Describe the event..."></textarea>
+
+            <div class="button-row">
+              <button id="saveEventButton" class="btn btn-primary" type="submit">
+                + Create Event
+              </button>
+              <button id="cancelEditButton" class="btn btn-outline hidden"
+                type="button">Cancel edit</button>
+            </div>
+            <p id="eventFormMessage" class="form-message" role="status"></p>
+          </form>
+        </section>
+
+        <!-- EVENT LIST -->
+        <section class="content-panel">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">YOUR EVENT INVENTORY</span>
+              <h2>Manage events</h2>
+            </div>
+          </div>
+          <div id="adminEventsList" class="admin-events-list"></div>
+          <p id="adminEventsEmpty" class="empty-state hidden">No events yet.</p>
+        </section>
+      </div>
+
+      <!-- REGISTRATION REQUESTS -->
+      <section class="content-panel admin-requests">
+        <div class="section-title">
+          <div>
+            <span class="eyebrow">PARTICIPANT APPROVALS</span>
+            <h2>Registration requests</h2>
+          </div>
+          <select id="requestFilter" aria-label="Filter registration requests">
+            <option value="All">All requests</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Participant</th>
+                <th>Event</th>
+                <th>Seats</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminRequestsBody"></tbody>
+          </table>
+        </div>
+        <p id="adminRequestsEmpty" class="empty-state hidden">
+          No registration requests match this filter.
+        </p>
+      </section>
+    </section>
+  </main>
+
+  <!-- PROFILE MODAL -->
+  <dialog id="profileDialog" class="modal">
+    <form method="dialog">
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">ACCOUNT DETAILS</span>
+          <h2>My profile</h2>
+        </div>
+        <button class="close-button" aria-label="Close profile">×</button>
+      </div>
+      <div class="profile-avatar" id="profileAvatar">U</div>
+      <div class="profile-field"><span>Full name</span><strong id="profileName">—</strong></div>
+      <div class="profile-field"><span>Email address</span><strong id="profileEmail">—</strong></div>
+      <div class="profile-field"><span>Department / role</span><strong id="profileDepartment">—</strong></div>
+      <div class="profile-field"><span>Account type</span><strong id="profileRole">—</strong></div>
+      <button class="btn btn-primary full" type="submit">Close</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer>
+    <a class="brand" href="#">Event<span>Ease</span></a>
+    <p>Campus events, organized simply. © <span id="year"></span></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
